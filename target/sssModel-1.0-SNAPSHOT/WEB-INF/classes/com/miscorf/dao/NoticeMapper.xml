@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miscorf.dao.NoticeMapper">
+    <insert id="addNotice"  parameterType="Notice" >
+        insert into community.user (
+        notice_id
+        notice_title,
+        notice_content,
+        notice_time,
+        notice_creator,
+        notice_display,
+        notice_right,
+        notice_short_content;
+        notice_image_uri;
+        notice_display_time;
+        notice_comment_disabled;
+        notice_statue;
+        )
+        values (
+        #{notice_id},
+        #{notice_title},
+        #{notice_content},
+        #{notice_time},
+        #{notice_creator},
+        #{notice_display},
+        #{notice_right});
+        #{notice_short_content});
+        #{notice_image_uri});
+        #{notice_display_time});
+        #{notice_comment_disabled});
+        #{notice_statue});
+
+    </insert>
+    <update id="deleteNoticeById" parameterType="int">
+            update community.notice
+            set notice_comment_disabled = false
+            where notice_id = #{notice_id} ;
+    </update>
+
+    <delete id="deleteNoticeByIds" parameterType="int" >
+        delete from community.notice where  notice_id= #{notice_id}
+    </delete>
+
+    <update id="updateNotice" parameterType="Notice">
+        update community.notice
+        set notice_id = #{notice_id} ,
+        notice_title=#{notice_title},
+        notice_content=#{notice_content},
+        notice_time=#{notice_time},
+        notice_creator=#{notice_creator},
+        notice_display=#{notice_display},
+        notice_right=#{notice_right},
+        notice_short_content=#{notice_short_content},
+        notice_image_uri=#{notice_image_uri},
+        notice_display_time=#{notice_display_time},
+        notice_comment_disabled=#{notice_comment_disabled},
+        notice_statue=#{notice_statue}
+        where notice_id = #{notice_id} ;
+    </update>
+
+    <select id="queryNoticeByRight" parameterType="String" resultType="Notice">
+        select * from community.notice  where notice_right=#{notice_right};
+    </select>
+
+    <select id="queryAllNotice"  resultType="Notice">
+        select * from community.notice
+    </select>
+
+    <select id="queryNoticeById" parameterType="int" resultType="Notice">
+        select * from community.notice  where notice_id=#{notice_id};
+    </select>
+
+</mapper>

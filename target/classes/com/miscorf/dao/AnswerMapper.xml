@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miscorf.dao.AnswerMapper">
+    <select id="getAnswerByFormIdUserName"  resultType="Answer">
+        select * from community.Answer where form_id =#{form_id}and user_name =#{user_name}
+    </select>
+    <insert id="addAnswer"  parameterType="Answer" >
+        insert into community.answer
+        (user_name,form_id,answer_time,answer_content,answer_type)
+        values (#{user_name},#{form_id},#{answer_time},#{answer_content},#{answer_type});
+    </insert>
+    <insert id="addAnswerAll"  >
+        insert into  community.answer
+        (form_id,user_name,answer_type)
+        values (#{form_id},#{user_name},false);
+    </insert>
+    <update id="updateAnswer" parameterType="Answer">
+            update community.answer
+            set
+            answer_time = #{answer_time}
+            answer_type=true,
+            answer_content=#{answer_content}
+    where user_name = #{user_name} and form_id=#{form_id};
+    </update>
+
+    <select id="getUserFormList"  resultType="Answer">
+        SELECT id,answer_type,form_name,deadline,form_creator FROM answer,form
+        WHERE user_name =#{user_name} and answer.form_id=form.form_id
+        limit #{begin_num},#{page_size}
+    </select>
+
+</mapper>

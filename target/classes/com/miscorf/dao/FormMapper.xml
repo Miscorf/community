@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miscorf.dao.FormMapper">
+    <insert id="addForm"  parameterType="Form" >
+        insert into community.form (form_name,template_id,form_creat_time,deadline,form_creator,type)
+        values (#{form_name},#{template_id},#{form_creat_time},#{deadline},#{form_creator},#{type});
+    </insert>
+    <select id="getFormById" resultType="Form">
+        select * from community.form  where form_id=#{id};
+    </select>
+    <insert id="addTemplate"  parameterType="Template" >
+        insert into community.template
+        (name,creat_time,creator,data,visible)
+        values (#{name},#{creat_time},#{creator},#{data},#{visible});
+    </insert>
+    <select id="queryAllTemplate" resultType="Template">
+        select * from community.template
+    </select>
+    <select id="queryAllForm" resultType="Form">
+        select * from community.form
+    </select>
+    <select id="queryTemplateById" resultType="Template">
+        select * from community.template where  id=#{id};
+    </select>
+
+
+    <select id="getFormByForm" resultType="Form">
+        select * from community.form where form_name = #{form_name}
+    </select>
+    <select id="getFormByName" resultType="Form">
+        select * from community.form where form_name = #{form_name}
+    </select>
+
+</mapper>

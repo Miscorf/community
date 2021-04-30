@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miscorf.dao.UserMapper">
+    <insert id="addUser"  parameterType="User" >
+        insert into community.user
+        (user_name, user_gender, user_phone,user_password,user_email,user_house_id,user_right)
+        values (#{user_name},#{user_gender},#{user_phone},#{user_password},#{user_email},#{user_house_id},#{user_right});
+    </insert>
+
+    <delete id="deleteUserById" parameterType="int" >
+        delete from community.books where  user_id= #{user_id}
+    </delete>
+
+    <update id="updateUser" parameterType="User">
+        update community.user
+        set user_name = #{user_name} ,
+        user_gender=#{user_gender},
+        user_phone=#{user_phone},
+        user_password=#{user_password},
+        user_email=#{user_email},
+        user_house_id=#{user_house_id},
+        user_right=#{user_right}
+        where user_id = #{user_id} ;
+    </update>
+
+    <select id="queryUserById" parameterType="int" resultType="User">
+        select * from community.user  where user_id=#{user_id};
+    </select>
+
+    <select id="queryAllUser"  resultType="User">
+        select * from community.user
+    </select>
+
+    <select id="queryUserRight" resultType="User">
+        select * from community.user where user_id=#{user_id};
+    </select>
+    <select id="queryAllUserPage" resultType="User">
+        select * from community.user
+        where user_name like #{user_name} and user_right like #{user_right}
+        limit #{begin_num},#{page_size}
+    </select>
+    <select id="queryUserByName" parameterType="String" resultType="User">
+        select * from community.user  where user_name=#{user_name};
+    </select>
+    <update id="setTokenUser" >
+        update community.user
+        set
+        token=#{token}
+        where user_id = #{user_id} ;
+    </update>
+    <select id="selectTokenUser" resultType="User">
+        select * from community.user  where token=#{token};
+    </select>
+
+    <update id="setTokenUserName" >
+        update community.user
+        set
+        token=#{token}
+        where user_name = #{user_name} ;
+    </update>
+
+</mapper>
