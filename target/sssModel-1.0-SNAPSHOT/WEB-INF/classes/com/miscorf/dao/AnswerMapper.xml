@@ -17,14 +17,15 @@
         (form_id,user_name,answer_type)
         values (#{form_id},#{user_name},false);
     </insert>
-    <update id="updateAnswer parameterType=Answer">
+    <update id="updateAnswer" parameterType="Answer">
             update community.answer
             set
-            answer_time=#{answer_time},
+            answer_time = #{answer_time}
             answer_type=true,
             answer_content=#{answer_content}
-    where user_name = #{user_name} and form_id=#{form_id}  ;
+    where user_name = #{user_name} and form_id=#{form_id};
     </update>
+
     <select id="getUserFormList"  resultType="Answer">
         SELECT id,answer_type,form_name,deadline,form_creator FROM answer,form
         WHERE user_name =#{user_name} and answer.form_id=form.form_id

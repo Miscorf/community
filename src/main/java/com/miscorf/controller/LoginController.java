@@ -67,6 +67,7 @@ public class LoginController {
         User user = userService.selectTokenUser(token);
         System.out.println(user);
         map.put("name",user.getUser_name());
+        map.put("roles","admin");
         responseJson.setData(map);
         System.out.println(responseJson);
         return responseJson;

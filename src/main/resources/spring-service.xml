@@ -24,7 +24,9 @@
         <property name="answerMapper" ref="answerMapper"/>
         <property name="userMapper" ref="userMapper"/>
     </bean>
-
+    <bean id="PayServiceImpl" class="com.miscorf.service.Impl.PayServiceImpl">
+        <property name="payMapper" ref="payMapper"/>
+    </bean>
 
     <!-- 配置事务管理器 -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

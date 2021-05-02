@@ -3,16 +3,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miscorf.pojo.*;
-import com.miscorf.service.BookService;
-import com.miscorf.service.FormService;
+import com.miscorf.service.*;
+import com.miscorf.service.Impl.BookServiceImpl;
 import com.miscorf.service.Impl.NoticeServiceImpl;
-import com.miscorf.service.NoticeService;
-import com.miscorf.service.UserService;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.jws.Oneway;
+import java.awt.print.Book;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.Format;
@@ -29,6 +28,16 @@ public class MyTest {
         for (Books books:bookServiceImpl.queryAllBook()){
             System.out.println(books);
         }
+
+//        Books book =new Books();
+//        book.setBookName("12312");
+//        bookServiceImpl.addBook(book);
+//        System.out.println(book.getBookID());
+        PayService payService = (PayService)context.getBean("PayServiceImpl");
+        Pay pay  = new Pay();
+        pay.setPay_title("text");
+        payService.creatPay(pay);
+        System.out.println(pay.getPay_table_id());
     }
     @Test
     public void user_test(){
