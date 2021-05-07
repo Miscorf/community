@@ -6,8 +6,8 @@
 <mapper namespace="com.miscorf.dao.UserMapper">
     <insert id="addUser"  parameterType="User" >
         insert into community.user
-        (user_name, user_gender, user_phone,user_password,user_email,user_house_id,user_right)
-        values (#{user_name},#{user_gender},#{user_phone},#{user_password},#{user_email},#{user_house_id},#{user_right});
+        (user_name, user_gender, user_phone,user_password,user_email,user_house_id,user_right,user_image)
+        values (#{user_name},#{user_gender},#{user_phone},#{user_password},#{user_email},#{user_house_id},#{user_right},#{user_image});
     </insert>
 
     <delete id="deleteUserById" parameterType="int" >
@@ -61,5 +61,13 @@
         token=#{token}
         where user_name = #{user_name} ;
     </update>
+    <update id="updatePassword" >
+        update community.user
+        set
+        user_password=#{user_password}
+        where user_name = #{user_name} ;
+    </update>
+
+
 
 </mapper>

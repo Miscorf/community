@@ -31,4 +31,17 @@
         limit #{begin_num},#{page_size}
     </select>
 
+    <select id="getPayByTableId"  resultType="Pay">
+        SELECT pay_title,pay_content,pay_money,pay_creator,create_time,deadline,is_pay,user_name FROM pay,pay_table
+        WHERE pay.pay_table_id =#{pay_table_id} and pay.pay_table_id=pay_table.pay_table_id
+        limit #{begin_num},#{page_size}
+    </select>
+
+    <select id="getAllPayByTableId"  resultType="Pay">
+        SELECT pay_title,pay_content,pay_money,pay_creator,create_time,deadline,is_pay FROM pay,pay_table
+        WHERE pay.pay_table_id =#{pay_table_id} and pay.pay_table_id=pay_table.pay_table_id
+
+    </select>
+
+
 </mapper>

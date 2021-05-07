@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miscorf.dao.MessageMapper">
+
+    <insert id="addMessage"  parameterType="Message" >
+        insert into community.message (user_name,message_title,message_content,message_date,message_type,message_is_read)
+        values (#{user_name},#{message_title},#{message_content},#{message_date},#{message_type},#{message_is_read});
+    </insert>
+    <select id="allMessage" resultType="Message">
+        select * from community.message
+    </select>
+
+
+
+
+    <select id="selectMessageByName" resultType="Message">
+        select * from community.message where user_name = #{user_name}
+    </select>
+
+    <select id="selectMessageBeforeDate" resultType="Message">
+        select * from community.message where message_date < #{message_date}
+    </select>
+
+    <select id="queryTemplateById" resultType="Template">
+        select * from community.template where  id=#{id};
+    </select>
+
+
+    <select id="getFormByForm" resultType="Form">
+        select * from community.form where form_name = #{form_name}
+    </select>
+    <select id="getFormByName" resultType="Form">
+        select * from community.form where form_name = #{form_name}
+    </select>
+
+</mapper>

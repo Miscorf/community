@@ -55,4 +55,9 @@ public class UserServiceImpl implements UserService {
     public boolean setTokenUserName(String user_name, String token) {
         return userMapper.setTokenUserName(user_name,token);
     }
+
+    public boolean updatePassword(String user_name, String user_password) {
+        return userMapper.updatePassword(user_name,user_password);
+    }
+
 }

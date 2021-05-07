@@ -10,6 +10,5 @@
     </typeAliases>
 
     <mappers>
-<!--    <mapper resource="com/miscorf/dao/BookMapper.xml"/>-->
     </mappers>
 </configuration>

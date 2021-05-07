@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @CrossOrigin
@@ -38,6 +40,7 @@ public class PayController {
         ResponseJson responseJson = new ResponseJson();
         responseJson.setData(payService.getAllPay(listQuery.getPage()-1,listQuery.getLimit()));
         System.out.println(responseJson);
+
         return responseJson;
     }
     @RequestMapping("/allUserPay")
@@ -47,6 +50,19 @@ public class PayController {
         ResponseJson responseJson = new ResponseJson();
 
         responseJson.setData(payService.getUserPayByName(listQuery.getPage()-1,listQuery.getLimit(),listQuery.getUser_name()));
+        System.out.println(responseJson);
+        return responseJson;
+    }
+    @RequestMapping("/getPayList")
+    @ResponseBody
+    public ResponseJson getPayList(@RequestBody ListQuery listQuery) {
+        System.out.println(listQuery);
+        ResponseJson responseJson = new ResponseJson();
+        List<Pay> list = payService.getPayByTableId(listQuery.getId(),listQuery.getPage()-1,listQuery.getLimit());
+        Map<String, Object> map = new HashMap();
+        map.put("items", list);
+        map.put("total",payService.getAllPayByTableId(listQuery.getId()).size());
+        responseJson.setData(map);
         System.out.println(responseJson);
         return responseJson;
     }

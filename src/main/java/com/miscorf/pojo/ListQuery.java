@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListQuery {
+    int id;
     int page;
     int limit;
     int importance;

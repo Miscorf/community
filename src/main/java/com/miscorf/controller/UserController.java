@@ -1,8 +1,10 @@
 package com.miscorf.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.miscorf.pojo.ListQuery;
 import com.miscorf.pojo.ResponseJson;
+import com.miscorf.pojo.Template;
 import com.miscorf.pojo.User;
 import com.miscorf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,15 @@ public class UserController {
         responseJson.setData(map);
         return responseJson;
     }
+    @RequestMapping(value = "/allUser")
+    @ResponseBody
+    public ResponseJson allUser() {
+
+        ResponseJson responseJson = new ResponseJson();
+
+        responseJson.setData(userService.queryAllUser());
+        return responseJson;
+    }
     @RequestMapping(value = "/update")
     @ResponseBody
     public ResponseJson user_update(@RequestBody User user) {
@@ -58,7 +69,6 @@ public class UserController {
             responseJson.setCode(50000);
             return responseJson;
         }
-
     }
     @RequestMapping(value = "/create")
     @ResponseBody
@@ -72,27 +82,40 @@ public class UserController {
             responseJson.setCode(50000);
             return responseJson;
         }
-
     }
-
-
-
-
-   @RequestMapping(value={"/sub_login"}, consumes={"application/json"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = "/fetchByName")
     @ResponseBody
-    public Map<String, Object> user_Login(@RequestBody  User user, HttpServletRequest request, ModelMap modelMap){
-        Map<String, Object> result = new HashMap();
-        User data_user=userService.queryUserByName(user.getUser_name());
-        if(data_user!=null&&user.getUser_password().equals(data_user.getUser_password())){
-            result.put("code", Integer.valueOf(12));
+    public ResponseJson fetchByName(String user_name) {
+        ResponseJson responseJson = new ResponseJson();
+        System.out.println(user_name);
+        User user = userService.queryUserByName(user_name);
+        if (user!= null){
+            responseJson.setData(user);
+            return responseJson;
         }
         else {
-            result.put("code", Integer.valueOf(-12));
+            responseJson.setCode(50000);
+            return responseJson;
         }
-        return result;
-
     }
-
+    @RequestMapping(value = "/updatePassword")
+    @ResponseBody
+    public ResponseJson updatePassword(@RequestBody String user) {
+        ResponseJson responseJson = new ResponseJson();
+        JSONObject jsonObject = JSONObject.parseObject(user);
+        System.out.println(user);
+        String name = jsonObject.getString("user_name");
+        String password = jsonObject.getString("user_password");
+        String first = jsonObject.getString("first");
+        User user1 = userService.queryUserByName(name);
+        if (user1.getUser_password().equals(password)){
+            userService.updatePassword(name,first);
+        }
+        else{
+            responseJson.setStatus("密码错误");
+        }
+       return  responseJson;
+    }
 
 
 }

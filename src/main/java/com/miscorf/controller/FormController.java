@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.sql.rowset.JdbcRowSet;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -121,6 +124,20 @@ public class FormController {
         System.out.println(answer);
         formService.updateAnswer(answer);
         System.out.println(answer);
+        return responseJson;
+    }
+
+    @RequestMapping("/getAnswerList")
+    @ResponseBody
+    public ResponseJson getAnswerList(@RequestBody ListQuery listQuery) {
+        System.out.println(listQuery);
+        ResponseJson responseJson = new ResponseJson();
+        List<Answer> list = formService.getAnswerListByFormId(listQuery.getId(),listQuery.getPage()-1,listQuery.getLimit());
+        Map<String, Object> map = new HashMap();
+        map.put("items", list);
+        map.put("total",formService.getAllAnswerByFormId(listQuery.getId()).size());
+        responseJson.setData(map);
+        System.out.println(responseJson);
         return responseJson;
     }
 }

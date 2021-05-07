@@ -46,5 +46,13 @@ public class PayServiceImpl implements PayService {
         return payMapper.getUserPayByName(begin_num,page_size,user_name);
     }
 
+    public List<Pay> getPayByTableId(int id, int begin_num, int page_size) {
+        return payMapper.getPayByTableId(id,begin_num,page_size);
+    }
+
+    public List<Pay> getAllPayByTableId(int id) {
+        return payMapper.getAllPayByTableId(id);
+    }
+
 
 }

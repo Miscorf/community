@@ -88,4 +88,12 @@ public class FormServiceImpl implements FormService {
         return this.answerMapper.updateAnswer(answer);
     }
 
+    public List<Answer> getAnswerListByFormId(int form_id, int begin_num, int page_size) {
+        return answerMapper.getAnswerListByFormId(form_id,begin_num,page_size);
+    }
+
+    public List<Answer> getAllAnswerByFormId(int form_id) {
+        return answerMapper.getAllAnswerByFormId(form_id);
+    }
+
 }

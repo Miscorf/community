@@ -1,22 +1,12 @@
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miscorf.pojo.*;
 import com.miscorf.service.*;
-import com.miscorf.service.Impl.BookServiceImpl;
-import com.miscorf.service.Impl.NoticeServiceImpl;
+import com.miscorf.util.QiniuCloudUtil;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.jws.Oneway;
-import java.awt.print.Book;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.Format;
 import java.util.List;
-import java.util.Map;
 
 public class MyTest {
 
@@ -24,11 +14,6 @@ public class MyTest {
     @Test
     public void text(){
         ApplicationContext context =  new ClassPathXmlApplicationContext("applicationContext.xml");
-        BookService bookServiceImpl = (BookService) context.getBean("BookServiceImpl");
-        for (Books books:bookServiceImpl.queryAllBook()){
-            System.out.println(books);
-        }
-
 //        Books book =new Books();
 //        book.setBookName("12312");
 //        bookServiceImpl.addBook(book);
@@ -43,7 +28,7 @@ public class MyTest {
     public void user_test(){
         ApplicationContext context =  new ClassPathXmlApplicationContext("applicationContext.xml");
         UserService userServiceImpl = (UserService) context.getBean("UserServiceImpl");
-        User user =new User(1,"1234","123","123","123","123",1,"admin","");
+        User user =new User(1,"","","1234","123","123","123","123",1,"admin","","");
         userServiceImpl.updateUser(user);
         List<User> users =userServiceImpl.queryAllUserPage(1,10,"li", null);
         //userServiceImpl.setTokenUser(19, "a794df83-4879-4f4a-a706-0a2f59182f74");
@@ -78,12 +63,18 @@ public class MyTest {
         ApplicationContext context =  new ClassPathXmlApplicationContext("applicationContext.xml");
         NoticeService  noticeService = (NoticeService) context.getBean("NoticeServiceImpl");
         Notice notice =new Notice(3, null, null, null, null, 0, null, null, null, null, false, null);
-        System.out.println(noticeService.deleteNoticeById(1));
-        System.out.println(noticeService.updateNotice(notice));
-        ObjectMapper mapper = new ObjectMapper();
-        String text = "{labelPosition=left, labelWidth=100, size=mini, outputHidden=true, hideRequiredMark=true, customStyle=}";
+        //System.out.println(noticeService.deleteNoticeById(1));
+        //System.out.println(noticeService.updateNotice(notice));
+        noticeService.addNotice(notice);
+//        ObjectMapper mapper = new ObjectMapper();
+//        String text = "{labelPosition=left, labelWidth=100, size=mini, outputHidden=true, hideRequiredMark=true, customStyle=}";
+//
+//        JSONObject obj = JSON.parseObject(text);
+//        System.out.println(obj);
+    }
+    @Test
+    public void user_test23_right() throws IOException {
+        QiniuCloudUtil qiniuCloudUtil = new QiniuCloudUtil();
 
-        JSONObject obj = JSON.parseObject(text);
-        System.out.println(obj);
     }
 }

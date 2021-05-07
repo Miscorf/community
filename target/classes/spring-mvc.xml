@@ -19,7 +19,11 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"></property>
+        <property name="maxUploadSize" value="5606660"></property>
+        <property name="maxInMemorySize" value="56066600"></property>
+    </bean>
 <!--    json utf-8全局转换-->
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">

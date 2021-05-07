@@ -23,5 +23,8 @@ public interface FormService {
     Form getFormByName(String form_name);
     List<Answer> getUserFormList(String user_name,int begin_num,int page_size);
     boolean updateAnswer(Answer answer);
+    List<Answer> getAnswerListByFormId(int form_id,int begin_num,int page_size);
+    List<Answer> getAllAnswerByFormId( int form_id);
+
 
 }

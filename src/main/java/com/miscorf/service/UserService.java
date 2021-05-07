@@ -1,6 +1,7 @@
 package com.miscorf.service;
 
 import com.miscorf.pojo.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface UserService {
     boolean setTokenUser(int user_id,String token);
     User selectTokenUser(String token);
     boolean setTokenUserName(String user_name,String token);
+    boolean updatePassword(String user_name , String user_password);
+
 }

@@ -5,48 +5,47 @@
 
 <mapper namespace="com.miscorf.dao.NoticeMapper">
     <insert id="addNotice"  parameterType="Notice" >
-        insert into community.user (
-        notice_id
+        insert into community.notice (
         notice_title,
         notice_content,
         notice_time,
         notice_creator,
         notice_display,
         notice_right,
-        notice_short_content;
-        notice_image_uri;
-        notice_display_time;
-        notice_comment_disabled;
-        notice_statue;
+        notice_short_content,
+        notice_image_uri,
+        notice_display_time,
+        notice_comment_disabled,
+        notice_statue
         )
         values (
-        #{notice_id},
         #{notice_title},
         #{notice_content},
         #{notice_time},
         #{notice_creator},
         #{notice_display},
-        #{notice_right});
-        #{notice_short_content});
-        #{notice_image_uri});
-        #{notice_display_time});
-        #{notice_comment_disabled});
-        #{notice_statue});
+        #{notice_right},
+        #{notice_short_content},
+        #{notice_image_uri},
+        #{notice_display_time},
+        #{notice_comment_disabled},
+        #{notice_statue})
 
     </insert>
-    <update id="deleteNoticeById" parameterType="int">
+    <update id="deleteNoticeByIds" parameterType="int">
             update community.notice
             set notice_comment_disabled = false
             where notice_id = #{notice_id} ;
     </update>
 
-    <delete id="deleteNoticeByIds" parameterType="int" >
+
+    <delete id="deleteNoticeById" parameterType="int" >
         delete from community.notice where  notice_id= #{notice_id}
     </delete>
 
     <update id="updateNotice" parameterType="Notice">
         update community.notice
-        set notice_id = #{notice_id} ,
+        set
         notice_title=#{notice_title},
         notice_content=#{notice_content},
         notice_time=#{notice_time},
