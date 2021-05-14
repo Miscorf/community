@@ -26,7 +26,8 @@
          limit #{begin_num},#{page_size}
     </select>
     <select id="getUserPayByName"  resultType="Pay">
-        SELECT pay_title,pay_content,pay_money,pay_creator,create_time,deadline,is_pay FROM pay,pay_table
+        SELECT pay_title,pay_content,pay_money,pay_creator,create_time,deadline,is_pay,pay.pay_table_id
+        FROM pay,pay_table
         WHERE user_name =#{user_name} and pay.pay_table_id=pay_table.pay_table_id
         limit #{begin_num},#{page_size}
     </select>

@@ -64,12 +64,17 @@ public class FormController {
         }
         return responseJson;
     }
-    @RequestMapping("/insert")
+    @RequestMapping("/deleteForm")
     @ResponseBody
-    public ResponseJson insert_content(String form) {
+    public ResponseJson deleteForm(int id) {
         ResponseJson responseJson = new ResponseJson();
-        System.out.println(form);
-        responseJson.setData(form);
+        System.out.println(id);
+        try {
+            formService.deleteForm(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseJson.setCode(500);
+        }
         return responseJson;
     }
     @RequestMapping("/allForm")
@@ -98,7 +103,7 @@ public class FormController {
         System.out.println(responseJson);
         return responseJson;
     }
-    @RequestMapping("/getFormById")
+        @RequestMapping("/getFormById")
     @ResponseBody
     public ResponseJson getFormById(int id) {
         //System.out.println(id);
@@ -132,12 +137,27 @@ public class FormController {
     public ResponseJson getAnswerList(@RequestBody ListQuery listQuery) {
         System.out.println(listQuery);
         ResponseJson responseJson = new ResponseJson();
-        List<Answer> list = formService.getAnswerListByFormId(listQuery.getId(),listQuery.getPage()-1,listQuery.getLimit());
+        List<Answer> list = formService.getAnswerListByFormId(listQuery.getId(),(listQuery.getPage()-1)*listQuery.getLimit(),listQuery.getLimit());
         Map<String, Object> map = new HashMap();
         map.put("items", list);
         map.put("total",formService.getAllAnswerByFormId(listQuery.getId()).size());
         responseJson.setData(map);
         System.out.println(responseJson);
+        return responseJson;
+    }
+    @RequestMapping(value = "/searchAnswer")
+    @ResponseBody
+    public ResponseJson searchAnswer(@RequestBody ListQuery listQuery) {
+        ResponseJson responseJson = new ResponseJson();
+        System.out.println(listQuery);
+        int begin_num = (listQuery.getPage()-1)*listQuery.getLimit();
+        int size = listQuery.getLimit();
+        String content='%'+listQuery.getTitle()+'%';
+        List<Answer> list = formService.searchAnswer(content,begin_num,size);
+        Map<String, Object> map = new HashMap();
+        map.put("items", list);
+        map.put("total",formService.searchAllAnswerByName(content).size());
+        responseJson.setData(map);
         return responseJson;
     }
 }

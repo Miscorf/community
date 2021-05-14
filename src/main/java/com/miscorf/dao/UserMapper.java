@@ -26,5 +26,6 @@ public interface UserMapper {
     boolean setTokenUserName(@Param("user_name")String  user_name , @Param("token")String token);
     User selectTokenUser(@Param("token")String token);
     boolean updatePassword(@Param("user_name")String user_name , @Param("user_password")String user_password);
+    boolean updateUserImage(User user);
 
 }

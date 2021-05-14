@@ -4,24 +4,37 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.miscorf.dao.MessageMapper">
-
-    <insert id="addMessage"  parameterType="Message" >
+    <insert id="addMessage"  parameterType="Message" useGeneratedKeys="true" keyProperty="message_id">
         insert into community.message (user_name,message_title,message_content,message_date,message_type,message_is_read)
         values (#{user_name},#{message_title},#{message_content},#{message_date},#{message_type},#{message_is_read});
     </insert>
     <select id="allMessage" resultType="Message">
-        select * from community.message
+        select * from community.message,community.`user`
+        WHERE message.user_name=`user`.user_name
     </select>
+    <update id="updateMessage" parameterType="Message">
+        update community.message
+        set message_content =#{message_content}
+        where message_id=#{message_id}
+    </update>
 
+    <update id="replyMessage" parameterType="Message">
+        update community.message
+        set message_reply =#{message_reply} , message_is_reply = true
+        where message_id=#{message_id}
+    </update>
 
-
-
+    <delete id="deleteMessage">
+        delete from community.message
+        where message_id=#{message_id}
+    </delete>
     <select id="selectMessageByName" resultType="Message">
-        select * from community.message where user_name = #{user_name}
+    select * from community.message,community.user
+    WHERE message.user_name=user.user_name and message.user_name = #{user_name}
     </select>
 
     <select id="selectMessageBeforeDate" resultType="Message">
-        select * from community.message where message_date < #{message_date}
+        select * from community.message where message_date &lt;#{message_date}
     </select>
 
     <select id="queryTemplateById" resultType="Template">

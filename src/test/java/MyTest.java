@@ -1,11 +1,16 @@
+
+import com.alipay.api.AlipayApiException;
 import com.miscorf.pojo.*;
 import com.miscorf.service.*;
+import com.miscorf.util.AlipayUtil;
 import com.miscorf.util.QiniuCloudUtil;
 import org.junit.Test;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 public class MyTest {
@@ -28,16 +33,21 @@ public class MyTest {
     public void user_test(){
         ApplicationContext context =  new ClassPathXmlApplicationContext("applicationContext.xml");
         UserService userServiceImpl = (UserService) context.getBean("UserServiceImpl");
-        User user =new User(1,"","","1234","123","123","123","123",1,"admin","","");
-        userServiceImpl.updateUser(user);
-        List<User> users =userServiceImpl.queryAllUserPage(1,10,"li", null);
+        User user = new User();
+        user.setUser_name("admin");
+        user.setUser_image("haha");
+        userServiceImpl.updateUserImage(user);
+        //User user =new User(1,"","","1234","123","123","123","123",1,"admin","","");
+       // userServiceImpl.updateUser(user);
+       // List<User> users =userServiceImpl.queryAllUserPage(1,10,"li", null);
         //userServiceImpl.setTokenUser(19, "a794df83-4879-4f4a-a706-0a2f59182f74");
-        FormService formService = (FormService)context.getBean("FormServiceImpl");
-        Answer answer =  new Answer();
-        answer.setForm_id(21);
-        answer.setUser_name("admin");
-        answer.setAnswer_content("content");
-        formService.updateAnswer(answer);
+
+//        FormService formService = (FormService)context.getBean("FormServiceImpl");
+//        Answer answer =  new Answer();
+//        answer.setForm_id(21);
+//        answer.setUser_name("admin");
+//        answer.setAnswer_content("content");
+//        formService.updateAnswer(answer);
 //        Template template = new Template();
 //        template.setName("123");
 //        template.setCreat_time("2021-04-27 13:41:24.832");
@@ -75,6 +85,16 @@ public class MyTest {
     @Test
     public void user_test23_right() throws IOException {
         QiniuCloudUtil qiniuCloudUtil = new QiniuCloudUtil();
+        String url= "http://test.miscorf.top/84f77739-fe3c-47e1-b1ac-148d2510d5a7";
+            //url = url.substring(23);
+        qiniuCloudUtil.delete(url);
+        System.out.println(url);
+
+    }
+    @Test
+    public void aliTest() throws IOException, AlipayApiException {
+        AlipayUtil alipayUtil = new AlipayUtil();
+        System.out.println(  alipayUtil.testAliPay());
 
     }
 }

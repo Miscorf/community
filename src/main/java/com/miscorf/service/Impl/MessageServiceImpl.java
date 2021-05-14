@@ -9,8 +9,19 @@ import java.util.List;
 
 public class MessageServiceImpl implements MessageService {
     MessageMapper messageMapper;
+    public void setMessageMapper(MessageMapper messageMapper) {
+        this.messageMapper=messageMapper;
+    }
     public boolean addMessage(Message message) {
         return messageMapper.addMessage(message);
+    }
+
+    public boolean updateMessage(Message message) {
+        return updateMessage(message);
+    }
+
+    public boolean deleteMessage(Message message) {
+        return deleteMessage(message);
     }
 
     public List<Message> allMessage() {
@@ -22,10 +33,13 @@ public class MessageServiceImpl implements MessageService {
     }
 
     public List<Message> selectMessageBeforeDate(Timestamp message_date) {
-        return selectMessageBeforeDate(message_date);
+        return messageMapper.selectMessageBeforeDate(message_date);
     }
 
-    public void setMessageMapper(MessageMapper messageMapper) {
-        this.messageMapper=messageMapper;
+    @Override
+    public boolean replyMessage(Message message) {
+        return messageMapper.replyMessage(message);
     }
+
+
 }

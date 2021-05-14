@@ -71,5 +71,14 @@
     <select id="queryNoticeById" parameterType="int" resultType="Notice">
         select * from community.notice  where notice_id=#{notice_id};
     </select>
+    <select id="searchNotice"  resultType="Notice">
+        select * from community.notice  where (notice_title like #{content} or notice_content like #{content} )
+        and notice_time &lt;#{date} ;
+    </select>
+    <select id="fetchNotice"  resultType="Notice">
+        select * from community.notice
+        limit #{begin_num},#{page_size}
+    </select>
+
 
 </mapper>

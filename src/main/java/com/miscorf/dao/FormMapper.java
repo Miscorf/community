@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface FormMapper {
     boolean addForm(Form form);
+    boolean deleteForm(int id);
     Form getFormById(int id);
     boolean addTemplate(Template template);
     List<Template>  queryAllTemplate();

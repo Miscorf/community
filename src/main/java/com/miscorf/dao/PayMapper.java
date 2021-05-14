@@ -12,8 +12,8 @@ public interface PayMapper {
     int  creatPayUsers(Pay pay);
     Pay selectPay(Pay pay);
     List<Pay> getAllPay(@Param("begin_num") int begin_num,@Param("page_size") int page_size);
-
     List<Pay> getUserPayByName(@Param("begin_num") int begin_num,@Param("page_size") int page_size,@Param("user_name")String user_name);
     List<Pay> getPayByTableId(@Param("pay_table_id") int id,@Param("begin_num") int begin_num,@Param("page_size") int page_size);
     List<Pay> getAllPayByTableId(@Param("pay_table_id") int id);
+
 }

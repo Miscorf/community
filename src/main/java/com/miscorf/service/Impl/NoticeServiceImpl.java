@@ -4,6 +4,7 @@ import com.miscorf.dao.NoticeMapper;
 import com.miscorf.pojo.Notice;
 import com.miscorf.service.NoticeService;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class NoticeServiceImpl implements NoticeService {
@@ -33,6 +34,14 @@ public class NoticeServiceImpl implements NoticeService {
 
     public Notice queryNoticeById(int notice_id) {
         return this.noticeMapper.queryNoticeById(notice_id);
+    }
+
+    public List<Notice> searchNotice(String title, Timestamp date, int begin_num, int page_size) {
+        return noticeMapper.searchNotice(title,date,begin_num,page_size);
+    }
+
+    public List<Notice> fetchNotice(int begin_num, int page_size) {
+        return noticeMapper.fetchNotice(begin_num,page_size);
     }
 
 

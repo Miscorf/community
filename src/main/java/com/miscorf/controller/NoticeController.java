@@ -1,5 +1,6 @@
 package com.miscorf.controller;
 
+import com.miscorf.pojo.ListQuery;
 import com.miscorf.pojo.Notice;
 import com.miscorf.pojo.ResponseJson;
 import com.miscorf.service.NoticeService;
@@ -12,9 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
-
+import java.sql.Timestamp;
+import java.util.*;
 
 @CrossOrigin
 @Controller
@@ -26,10 +26,15 @@ public class NoticeController {
 
     @RequestMapping(value = "/all")
     @ResponseBody
-    public ResponseJson notice_all() {
+    public ResponseJson notice_all(@RequestBody ListQuery listQuery) {
+        System.out.println(listQuery);
         ResponseJson responseJson = new ResponseJson();
-        List<Notice> notices= noticeService.queryAllNotice();
-        responseJson.setData(notices);
+        int beg = (listQuery.getPage()-1)*listQuery.getLimit();
+        List<Notice> notices= noticeService.fetchNotice(beg,listQuery.getLimit());
+        Map<String, Object> map = new HashMap();
+        map.put("items", notices);
+        map.put("total",noticeService.queryAllNotice().size());
+        responseJson.setData(map);
         return responseJson;
     }
     @RequestMapping(value = "/fetch")
@@ -88,6 +93,22 @@ public class NoticeController {
         }
 
     }
+    @RequestMapping(value = "/searchNotice")
+    @ResponseBody
+    public ResponseJson searchNotice(@RequestBody ListQuery listQuery) {
+        ResponseJson responseJson = new ResponseJson();
+        System.out.println(listQuery);
+        int begin_num = (listQuery.getPage()-1)*listQuery.getLimit();
+        int size = listQuery.getLimit();
+        String content='%'+listQuery.getTitle()+'%';
+        if (listQuery.getDate()==null){
+            listQuery.setDate(new Timestamp(new Date().getTime()));
+        }
+        Timestamp date =listQuery.getDate();
+        List<Notice> list = noticeService.searchNotice(content,date,begin_num,size);
+        responseJson.setData(list);
+        return responseJson;
+    }
     @ResponseBody
     @RequestMapping(value="/uploadImg", method=RequestMethod.POST)
     public ResponseJson uploadImg(@RequestParam("uploadFile") MultipartFile image, HttpServletRequest request) {
@@ -118,4 +139,5 @@ public class NoticeController {
             return result;
         }
     }
+
 }

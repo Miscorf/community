@@ -67,6 +67,12 @@
         user_password=#{user_password}
         where user_name = #{user_name} ;
     </update>
+    <update id="updateUserImage" >
+        update community.user
+        set
+        user_image=#{user_image}
+        where user_name = #{user_name} ;
+    </update>
 
 
 

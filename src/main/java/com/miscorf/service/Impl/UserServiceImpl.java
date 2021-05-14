@@ -60,4 +60,8 @@ public class UserServiceImpl implements UserService {
         return userMapper.updatePassword(user_name,user_password);
     }
 
+    public boolean updateUserImage(User user) {
+        return userMapper.updateUserImage(user);
+    }
+
 }

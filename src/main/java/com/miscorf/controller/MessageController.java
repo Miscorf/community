@@ -21,19 +21,20 @@ public class MessageController {
     @Autowired
     @Qualifier("MessageServiceImpl")
     MessageService messageService;
-    @RequestMapping(value = "/all")
+    @RequestMapping(value = "/allMessage")
     @ResponseBody
-    public ResponseJson all() {
+    public ResponseJson allMessage() {
         ResponseJson responseJson = new ResponseJson();
         List<Message> list = messageService.allMessage();
+        System.out.println(list);
         responseJson.setData(list);
         return responseJson;
     }
-    @RequestMapping(value = "/selectMessageByName")
+    @RequestMapping(value = "/allUserMessage")
     @ResponseBody
-    public ResponseJson selectMessageByName(String user_name) {
+    public ResponseJson allUserMessage(String name) {
         ResponseJson responseJson = new ResponseJson();
-        List<Message> list = messageService.selectMessageByName(user_name);
+        List<Message> list = messageService.selectMessageByName(name);
         responseJson.setData(list);
         return responseJson;
     }
@@ -45,13 +46,42 @@ public class MessageController {
         responseJson.setData(list);
         return responseJson;
     }
-    @RequestMapping(value = "/addMessage")
+    @RequestMapping(value = "/createMessage")
     @ResponseBody
-    public ResponseJson selectMessageByName(@RequestBody Message message) {
+    public ResponseJson createMessage(@RequestBody Message message) {
         ResponseJson responseJson = new ResponseJson();
         if ( !messageService.addMessage(message)){
            responseJson.setCode(50000);
         }
         return responseJson;
     }
+    @RequestMapping(value = "/updateMessage")
+    @ResponseBody
+    public ResponseJson updateMessage(@RequestBody Message message) {
+        ResponseJson responseJson = new ResponseJson();
+        if ( !messageService.updateMessage(message)){
+            responseJson.setCode(50000);
+        }
+        return responseJson;
+    }
+    @RequestMapping(value = "/deleteMessage")
+    @ResponseBody
+    public ResponseJson deleteMessage(@RequestBody Message message) {
+        ResponseJson responseJson = new ResponseJson();
+        if ( !messageService.deleteMessage(message)){
+            responseJson.setCode(50000);
+        }
+        return responseJson;
+    }
+    @RequestMapping(value = "/replyMessage")
+    @ResponseBody
+    public ResponseJson replyMessage(@RequestBody Message message) {
+        ResponseJson responseJson = new ResponseJson();
+        if ( !messageService.replyMessage(message)){
+            responseJson.setCode(50000);
+        }
+        return responseJson;
+    }
+
+
 }

@@ -20,5 +20,5 @@ public interface UserService {
     User selectTokenUser(String token);
     boolean setTokenUserName(String user_name,String token);
     boolean updatePassword(String user_name , String user_password);
-
+    boolean updateUserImage(User user);
 }

@@ -11,6 +11,11 @@
     <select id="getFormById" resultType="Form">
         select * from community.form  where form_id=#{id};
     </select>
+    <delete id="deleteForm">
+        delete from community.form where form_id=#{id};
+    </delete>
+
+
     <insert id="addTemplate"  parameterType="Template" >
         insert into community.template
         (name,creat_time,creator,data,visible)

@@ -4,23 +4,22 @@ package com.miscorf.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.miscorf.pojo.ListQuery;
 import com.miscorf.pojo.ResponseJson;
-import com.miscorf.pojo.Template;
 import com.miscorf.pojo.User;
 import com.miscorf.service.UserService;
+import com.miscorf.util.QiniuCloudUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @CrossOrigin
@@ -116,6 +115,59 @@ public class UserController {
         }
        return  responseJson;
     }
+    @RequestMapping(value = "/updateImage")
+    @ResponseBody
+    public ResponseJson updateImage(@RequestBody User user) {
+        ResponseJson responseJson = new ResponseJson();
+        System.out.println(user);
+        return  responseJson;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/upload", method= RequestMethod.POST)
+    public ResponseJson upload(@RequestParam("uploadFile") MultipartFile image,
+                               @RequestParam("user") String name,
+                               @RequestParam("avatar") String avatar, HttpServletRequest request) {
+        ResponseJson result = new ResponseJson();
+
+        System.out.println(name);
+        System.out.println(image);
+        System.out.println(avatar);
+        if (image.isEmpty()) {
+            result.setCode(400);
+            result.setStatus("文件为空，请重新上传");
+            return result;
+        }
+        try {
+            byte[] bytes = image.getBytes();
+            String imageName = UUID.randomUUID().toString();
+            QiniuCloudUtil qiniuUtil = new QiniuCloudUtil();
+            try {
+                //使用base64方式上传到七牛云
+                String url = qiniuUtil.put64image(bytes, imageName);
+                //String url= "http://img.miscorf.top/b449177c-f60d-4811-ab1f-146d4ad12006";
+                User user = new User();
+                user.setUser_name(name);
+                user.setUser_image(url);
+                userService.updateUserImage(user);
+                //删除原头像
+                qiniuUtil.delete(avatar);
+                result.setStatus("文件上传成功");
+                result.setData(user);
+
+
+                System.out.println(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        } catch (IOException e) {
+            result.setCode(500);
+            result.setData("文件上传发生异常！");
+            return result;
+        }
+    }
+
 
 
 }

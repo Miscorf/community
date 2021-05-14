@@ -20,4 +20,5 @@ public class Answer {
     String answer_content;
     boolean answer_type;
     String form_creator;
+    String data;
 }

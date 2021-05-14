@@ -25,6 +25,9 @@ public interface FormService {
     boolean updateAnswer(Answer answer);
     List<Answer> getAnswerListByFormId(int form_id,int begin_num,int page_size);
     List<Answer> getAllAnswerByFormId( int form_id);
+    boolean deleteForm(int id);
+    List<Answer> searchAnswer(@Param("user_name") String user_name,@Param("begin_num") int begin_num, @Param("page_size") int page_size);
+    List<Answer> searchAllAnswerByName(@Param("user_name") String user_name);
 
 
 }

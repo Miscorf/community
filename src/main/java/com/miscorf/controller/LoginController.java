@@ -52,6 +52,7 @@ public class LoginController {
         List<String> list = new ArrayList<String>();
         list.add(user.getUser_right());
         map.put("roles",list);
+        map.put("avatar",user.getUser_image());
         responseJson.setData(map);
         responseJson.setToken(token);
 

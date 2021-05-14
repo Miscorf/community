@@ -96,4 +96,22 @@ public class FormServiceImpl implements FormService {
         return answerMapper.getAllAnswerByFormId(form_id);
     }
 
+    public boolean deleteForm(int id) {
+        try {
+            formMapper.deleteForm(id);
+            answerMapper.deleteAnswerByFormId(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    public List<Answer> searchAnswer(String user_name, int begin_num, int page_size) {
+        return answerMapper.searchAnswer(user_name,begin_num,page_size);
+    }
+
+    public List<Answer> searchAllAnswerByName(String user_name) {
+        return answerMapper.searchAllAnswerByName(user_name);
+    }
+
 }

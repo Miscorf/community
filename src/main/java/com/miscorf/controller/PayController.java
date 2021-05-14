@@ -1,10 +1,10 @@
 package com.miscorf.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.AlipayApiException;
 import com.miscorf.pojo.*;
-import com.miscorf.service.FormService;
 import com.miscorf.service.PayService;
+import com.miscorf.util.AlipayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -26,9 +26,9 @@ public class PayController {
     public ResponseJson create(@RequestBody Pay pay) {
         ResponseJson responseJson = new ResponseJson();
         System.out.println(pay);
+        try {
+            payService.creatPayUsers(pay);
 
-        System.out.println();
-        try {payService.creatPayUsers(pay);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -66,4 +66,39 @@ public class PayController {
         System.out.println(responseJson);
         return responseJson;
     }
+    @RequestMapping("/createPayItem")
+    @ResponseBody
+    public ResponseJson createPayItem(@RequestBody PayItem payItem) {
+        ResponseJson responseJson = new ResponseJson();
+        System.out.println(payItem);
+        try {payService.creatPayItem(payItem);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return responseJson;
+    }
+    @RequestMapping("/getAllPayItems")
+    @ResponseBody
+    public ResponseJson getAllPayItems() {
+        ResponseJson responseJson = new ResponseJson();
+        try {
+            List<PayItem> list = payService.getAllPayItem();
+            responseJson.setData(list);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return responseJson;
+    }
+    @RequestMapping(value = "/aliPay")
+    @ResponseBody
+    public ResponseJson aliPay(@RequestBody Pay pay) throws AlipayApiException {
+        ResponseJson responseJson = new ResponseJson();
+        System.out.println(pay);
+         AlipayUtil alipayUtil = new AlipayUtil();
+         alipayUtil.payAliPay(pay);
+         responseJson.setData(alipayUtil.payAliPay(pay));
+        return  responseJson;
+    }
+
+
 }

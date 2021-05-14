@@ -19,6 +19,7 @@ public class Pay {
     int pay_money;
     boolean is_pay;
     List<User> pay_user;
+    List<PayItem> PayItems;
     String pay_creator;
     Timestamp deadline;
     Timestamp create_time;
