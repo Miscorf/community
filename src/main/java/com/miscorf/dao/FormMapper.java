@@ -17,4 +17,7 @@ public interface FormMapper {
     List<Form>  queryAllForm();
     Form getFormByForm(Form form);
     Form getFormByName(String form_name);
+    List<Form> getFormList(@Param("name")String name,@Param("form_creator")String form_creator, @Param("begin_num") int begin_num, @Param("page_size") int page_size);
+    List<Form> getFormListTotal(@Param("name")String name,@Param("form_creator")String form_creator);
+    List<Form> getRecentlyFormStatus();
 }

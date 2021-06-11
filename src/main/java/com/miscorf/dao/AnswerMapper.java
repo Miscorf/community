@@ -11,9 +11,12 @@ public interface AnswerMapper {
     boolean updateAnswer(Answer answer);
     boolean deleteAnswerByFormId(int id);
     boolean addAnswerAll(@Param("form_id") int form_id,@Param("user_name")String user_name);
-    List<Answer> getUserFormList(@Param("user_name")String user_name, @Param("begin_num") int begin_num, @Param("page_size") int page_size);
+    List<Answer> getUserFormList(@Param("title")String title,@Param("user_name")String user_name, @Param("begin_num") int begin_num, @Param("page_size") int page_size);
     List<Answer> getAnswerListByFormId(@Param("form_id") int form_id,@Param("begin_num") int begin_num, @Param("page_size") int page_size);
     List<Answer> getAllAnswerByFormId(@Param("form_id") int form_id);
     List<Answer> searchAnswer(@Param("user_name") String user_name,@Param("begin_num") int begin_num, @Param("page_size") int page_size);
     List<Answer> searchAllAnswerByName(@Param("user_name") String user_name);
+    List<Answer> getUserFormTotal(@Param("title")String title,@Param("user_name")String user_name);
+    int getAnswerCount(int form_id);
+
 }

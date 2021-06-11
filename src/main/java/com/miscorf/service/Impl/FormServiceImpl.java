@@ -2,20 +2,20 @@ package com.miscorf.service.Impl;
 
 import com.miscorf.dao.AnswerMapper;
 import com.miscorf.dao.FormMapper;
+import com.miscorf.dao.PayMapper;
 import com.miscorf.dao.UserMapper;
-import com.miscorf.pojo.Answer;
-import com.miscorf.pojo.Form;
-import com.miscorf.pojo.Template;
-import com.miscorf.pojo.User;
+import com.miscorf.pojo.*;
 import com.miscorf.service.FormService;
+import org.apache.ibatis.binding.MapperMethod;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class FormServiceImpl implements FormService {
-    FormMapper formMapper;
-    AnswerMapper answerMapper;
-    UserMapper userMapper;
+    private FormMapper formMapper;
+    private AnswerMapper answerMapper;
+    private UserMapper userMapper;
 
     public void setAnswerMapper(AnswerMapper answerMapper) {
         this.answerMapper = answerMapper;
@@ -44,6 +44,7 @@ public class FormServiceImpl implements FormService {
     }
 
     public Template queryTemplateById(int id) {
+
         return formMapper.queryTemplateById(id);
     }
 
@@ -59,9 +60,7 @@ public class FormServiceImpl implements FormService {
         return answerMapper.addAnswer(answer);
     }
 
-    public boolean addAnswerByFromId(int form_id) {
-        List<User> users=  userMapper.queryAllUser();
-
+    public boolean addAnswerByFromId(int form_id,List<User> users) {
         try {
             for (User user:users) {
                 answerMapper.addAnswerAll(form_id,user.getUser_name());
@@ -80,8 +79,8 @@ public class FormServiceImpl implements FormService {
         return formMapper.getFormByName(form_name);
     }
 
-    public List<Answer> getUserFormList(String user_name,int begin_num,int page_size) {
-        return this.answerMapper.getUserFormList(user_name,begin_num,page_size);
+    public List<Answer> getUserFormList(String title,String user_name,int begin_num,int page_size) {
+        return this.answerMapper.getUserFormList(title,user_name,begin_num,page_size);
     }
 
     public boolean updateAnswer(Answer answer) {
@@ -112,6 +111,54 @@ public class FormServiceImpl implements FormService {
 
     public List<Answer> searchAllAnswerByName(String user_name) {
         return answerMapper.searchAllAnswerByName(user_name);
+    }
+
+    @Override
+    public List<Form> getFormList(String name, String form_creator, int begin_num, int page_size) {
+        return formMapper.getFormList(name,form_creator,begin_num, page_size);
+    }
+
+    @Override
+    public List<Answer> getUserFormTotal(String title,String user_name) {
+        return answerMapper.getUserFormTotal(title, user_name);
+    }
+
+    @Override
+    public List<Form> getFormListTotal(String name, String form_creator) {
+        return formMapper.getFormListTotal(name,form_creator);
+    }
+
+    @Override
+    public Map<String,Object>  getFormChart() {
+        List<Form> formList = formMapper.getRecentlyFormStatus();
+        System.out.println("!!!   System.out.println(formList);");
+        System.out.println(formList);
+        List<FormChart> formCharts = new ArrayList<>() ;
+        for (Form f:formList
+             ) {
+            FormChart formChart = new FormChart();
+            formChart.setAnwserCount(answerMapper.getAnswerCount(f.getForm_id()));
+            formChart.setTitle(f.getForm_name());
+            formChart.setTotal(answerMapper.getAllAnswerByFormId(f.getForm_id()).size());
+            System.out.println(formChart);
+            formCharts.add(formChart);
+        }
+        System.out.println("!!!   System.out.println(formList);");
+        List<String> titles = new ArrayList<>();
+        List<Integer> count = new ArrayList<>();
+        List<Integer> answer_count = new ArrayList<>();
+
+        for (FormChart f :formCharts
+                ) {
+            titles.add(f.getTitle());
+            count.add(f.getTotal()-f.getAnwserCount());
+            answer_count.add(f.getAnwserCount());
+        }
+        Map<String,Object> map = new MapperMethod.ParamMap<>();
+        map.put("titles",titles);
+        map.put("count",count);
+        map.put("answer_count",answer_count);
+        return map;
     }
 
 }

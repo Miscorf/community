@@ -14,6 +14,7 @@ public class Answer {
     int id;
     String user_name;
     String form_name;
+    String user_id_name;
     Timestamp deadline;
     int form_id;
     Timestamp answer_time;

@@ -6,20 +6,24 @@
 <mapper namespace="com.miscorf.dao.PayItemMapper">
     <insert id="creatPayItem"  parameterType="PayItem" useGeneratedKeys="true" keyProperty="pay_item_id" >
         insert into community.pay_item
-        (pay_item_name,pay_item_money,pay_item_content,pay_item_type,update_time)
-        values (#{pay_item_name},#{pay_item_money},#{pay_item_content},#{pay_item_type},#{update_time});
+        (pay_item_name,pay_item_money,pay_item_content,pay_item_type,update_time,creator)
+        values (#{pay_item_name},#{pay_item_money},#{pay_item_content},#{pay_item_type},#{update_time},#{creator});
     </insert>
     <update id="updatePayItem"  parameterType="PayItem" >
         update  community.pay_item
-        set (pay_item_name,pay_item_money,pay_item_content,pay_item_type,update_time)
-        values (#{pay_item_name},#{pay_item_money},#{pay_item_content},#{pay_item_type},#{update_time})
+        set  pay_item_name=#{pay_item_name}
+            ,pay_item_money=#{pay_item_money}
+            ,pay_item_content=#{pay_item_content}
+            ,pay_item_type=#{pay_item_type}
+            ,update_time=#{update_time}
         where pay_item_id=#{pay_item_id}
     </update>
     <select id="getAllPayItem" parameterType="payItem" resultType="payItem">
         select * from community.pay_item
     </select>
-    <select id="getAllPayItemPage" parameterType="payItem" resultType="payItem">
+    <select id="getAllPayItemPage" resultType="payItem">
         select * from community.pay_item
+        where pay_item_name like #{name}
         limit #{begin_num},#{page_size}
     </select>
     <delete id="deletePayItem">

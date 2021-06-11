@@ -38,5 +38,21 @@
     <select id="getFormByName" resultType="Form">
         select * from community.form where form_name = #{form_name}
     </select>
+    <select id="getFormList" resultType="Form">
+        select * from community.form
+        where form_name like #{name} and form_creator like #{form_creator}
+        limit #{begin_num},#{page_size}
+    </select>
+    <select id="getFormListTotal" resultType="Form">
+        select * from community.form
+        where form_name like #{name} and form_creator like #{form_creator}
+    </select>
+    <select id="getRecentlyFormStatus" resultType="Form">
+        select * from community.form
+        order by form_creat_time
+        limit 0,12
+    </select>
+
+
 
 </mapper>

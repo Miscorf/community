@@ -5,8 +5,8 @@
 
 <mapper namespace="com.miscorf.dao.MessageMapper">
     <insert id="addMessage"  parameterType="Message" useGeneratedKeys="true" keyProperty="message_id">
-        insert into community.message (user_name,message_title,message_content,message_date,message_type,message_is_read)
-        values (#{user_name},#{message_title},#{message_content},#{message_date},#{message_type},#{message_is_read});
+        insert into community.message (user_name,message_title,message_content,message_date,message_type)
+        values (#{user_name},#{message_title},#{message_content},#{message_date},#{message_type});
     </insert>
     <select id="allMessage" resultType="Message">
         select * from community.message,community.`user`

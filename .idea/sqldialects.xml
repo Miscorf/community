@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/miscorf/dao/AnswerMapper.xml" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/miscorf/dao/FormMapper.xml" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/miscorf/dao/HouseMapper.xml" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/miscorf/dao/MessageMapper.xml" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/miscorf/dao/NoticeMapper.xml" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/miscorf/dao/PayMapper.xml" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/miscorf/dao/UserMapper.xml" dialect="GenericSQL" />
   </component>

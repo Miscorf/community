@@ -2,12 +2,13 @@ package com.miscorf.service.Impl;
 
 import com.miscorf.dao.PayItemMapper;
 import com.miscorf.dao.PayMapper;
-import com.miscorf.pojo.Pay;
-import com.miscorf.pojo.PayItem;
-import com.miscorf.pojo.User;
+import com.miscorf.pojo.*;
 import com.miscorf.service.PayService;
+import org.apache.ibatis.binding.MapperMethod;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PayServiceImpl implements PayService {
     private PayMapper payMapper;
@@ -21,6 +22,23 @@ public class PayServiceImpl implements PayService {
     }
     public boolean creatPay(Pay pay) {
         return payMapper.creatPay(pay);
+    }
+
+    @Override
+    public boolean updatePay(Pay pay) {
+        return payMapper.updatePay(pay);
+    }
+
+    @Override
+    public boolean deletePay(int pay_table_id) {
+        try {
+            payMapper.deletePay(pay_table_id);
+            payItemMapper.deletePayTableItemsByTableId(pay_table_id);
+            payMapper.deletePayTable(pay_table_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public boolean creatPayUsers(Pay pay) {
@@ -45,9 +63,9 @@ public class PayServiceImpl implements PayService {
         return true;
     }
 
-    public List<Pay> getAllPay(int begin_num, int page_size) {
+    public List<Pay> getAllPay(String name,String creator,int begin_num, int page_size) {
         try {
-            List<Pay> list = payMapper.getAllPay(begin_num,page_size) ;
+            List<Pay> list = payMapper.getAllPay(name,creator,begin_num,page_size) ;
             for (Pay pay:list
                  ) {
                 pay.setPayItems(getPayTableItemsByTableId(pay.getPay_table_id()));
@@ -59,11 +77,16 @@ public class PayServiceImpl implements PayService {
         return null;
     }
 
-    public List<Pay> getUserPayByName(int begin_num, int page_size, String user_name) {
+    @Override
+    public List<Pay> getAllPayTotal(String name, String creator) {
+        return payMapper.getAllPayTotal(name,creator);
+    }
+
+    public List<Pay> getUserPayByName(int begin_num, int page_size, String user_name,String name) {
 
         try {
 
-            List<Pay> list = payMapper.getUserPayByName(begin_num,page_size,user_name);
+            List<Pay> list = payMapper.getUserPayByName(begin_num,page_size,user_name,name);
             System.out.println("list!!!="+list);
             for (Pay pay:list
             ) {
@@ -75,6 +98,11 @@ public class PayServiceImpl implements PayService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<Pay> getUserPayTotal(String user_name, String name) {
+        return payMapper.getUserPayTotal(user_name,name);
     }
 
     public List<Pay> getPayByTableId(int id, int begin_num, int page_size) {
@@ -97,8 +125,8 @@ public class PayServiceImpl implements PayService {
         return payItemMapper.getAllPayItem();
     }
 
-    public List<PayItem> getAllPayItemPage(int begin_num, int page_size) {
-        return payItemMapper.getAllPayItemPage(begin_num,page_size);
+    public List<PayItem> getAllPayItemPage(int begin_num, int page_size,String name) {
+        return payItemMapper.getAllPayItemPage(begin_num,page_size,name);
     }
 
     public boolean deletePayItem(PayItem payItem) {
@@ -128,5 +156,36 @@ public class PayServiceImpl implements PayService {
     public List<PayItem> getPayTableItemsByItemId(int id) {
         return payItemMapper.getPayTableItemsByItemId(id);
     }
+    @Override
+    public Map<String,Object> getPayChart() {
+        List<Pay> payList =payMapper.getRecentlyPayStatus();
+        System.out.println("!!!   System.out.printlnpays();");
+        System.out.println(payList);
+        List<FormChart> formCharts = new ArrayList<>() ;
+        for (Pay f:payList
+        ) {
+            FormChart formChart = new FormChart();
+            formChart.setAnwserCount(payMapper.getPayedCount(f.getPay_table_id()));
+            formChart.setTitle(f.getPay_title());
+            formChart.setTotal(payMapper.getAllPayByTableId(f.getPay_table_id()).size());
+            System.out.println(formChart);
+            formCharts.add(formChart);
+        }
+        System.out.println("!!!   System.out.println(formList);");
+        List<String> titles = new ArrayList<>();
+        List<Integer> count = new ArrayList<>();
+        List<Integer> answer_count = new ArrayList<>();
 
+        for (FormChart f :formCharts
+        ) {
+            titles.add(f.getTitle());
+            count.add(f.getTotal()-f.getAnwserCount());
+            answer_count.add(f.getAnwserCount());
+        }
+        Map<String,Object> map = new MapperMethod.ParamMap<>();
+        map.put("titles",titles);
+        map.put("count",count);
+        map.put("answer_count",answer_count);
+        return map;
+    }
 }

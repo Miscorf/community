@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class Template {
     int id;
+    String form_name;
     String  name;
     Timestamp creat_time;
     String creator;

@@ -9,7 +9,7 @@ public interface PayItemMapper {
     boolean creatPayItem(PayItem payItem);
     boolean updatePayItem(PayItem payItem);
     List<PayItem> getAllPayItem();
-    List<PayItem> getAllPayItemPage(@Param("begin_num") int begin_num, @Param("page_size") int page_size);
+    List<PayItem> getAllPayItemPage(@Param("begin_num") int begin_num, @Param("page_size") int page_size,@Param("name")String name );
     boolean deletePayItem(PayItem payItem);
 
     boolean creatPayTableItems(PayItem payItem);

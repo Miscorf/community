@@ -12,6 +12,7 @@
     <!--ServiceImpl注入到IOC容器中-->
     <bean id="UserServiceImpl" class="com.miscorf.service.Impl.UserServiceImpl">
         <property name="userMapper" ref="userMapper"/>
+        <property name="houseMapper" ref="houseMapper"/>
     </bean>
     <bean id="NoticeServiceImpl" class="com.miscorf.service.Impl.NoticeServiceImpl">
         <property name="noticeMapper" ref="noticeMapper"/>

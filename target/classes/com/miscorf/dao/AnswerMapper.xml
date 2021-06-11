@@ -28,19 +28,23 @@
     </update>
 
     <select id="getUserFormList"  resultType="Answer">
-        SELECT id,answer_type,form_name,deadline,form_creator,form.form_id FROM answer,form
-        WHERE user_name =#{user_name} and answer.form_id=form.form_id
+        SELECT answer.id,answer_type,form_name,deadline,form_creator,form.form_id,answer_content,template.data FROM answer,form,template
+        WHERE user_name =#{user_name} and answer.form_id=form.form_id and form.template_id=template.id and form_name like #{title}
         limit #{begin_num},#{page_size}
     </select>
+    <select id="getUserFormTotal"  resultType="Answer">
+        SELECT answer.id,answer_type,form_name,deadline,form_creator,form.form_id,answer_content,template.data FROM answer,form,template
+        WHERE user_name =#{user_name} and answer.form_id=form.form_id and form.template_id=template.id and form_name like #{title}
+
+    </select>
     <select id="getAnswerListByFormId"  resultType="Answer">
-        SELECT answer.id,user_name,answer_type,form_name,deadline,form_creator,answer_content,template.data FROM answer,form,template
-        WHERE answer.form_id=form.form_id and form.form_id=#{form_id} and form.template_id=template.id
+        SELECT answer.id,user.user_name,answer_type,form_name,deadline,form_creator,answer_content,template.data,user_id_name FROM answer,form,template,user
+        WHERE answer.form_id=form.form_id and form.form_id=#{form_id} and form.template_id=template.id and user.user_name=answer.user_name
         limit #{begin_num},#{page_size}
     </select>
     <select id="getAllAnswerByFormId"  resultType="Answer">
         SELECT answer.id,user_name,answer_type,form_name,deadline,form_creator,answer_content,template.data FROM answer,form,template
         WHERE answer.form_id=form.form_id and form.form_id=#{form_id} and form.template_id=template.id
-
     </select>
     <delete id="deleteAnswerByFormId">
          delete from community.answer where form_id=#{id};
@@ -53,6 +57,10 @@
     <select id="searchAllAnswerByName"  resultType="Answer">
         SELECT id,user_name,answer_type,form_name,deadline,form_creator,answer_content FROM answer,form
         WHERE answer.form_id=form.form_id and answer.user_name like #{user_name}
+    </select>
+    <select id="getAnswerCount"  resultType="int">
+        SELECT COUNT(answer_type) FROM answer
+        where answer_type = true and form_id = #{form_id}
     </select>
 
 </mapper>

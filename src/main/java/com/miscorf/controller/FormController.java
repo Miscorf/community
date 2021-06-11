@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.miscorf.dao.FormMapper;
 import com.miscorf.pojo.*;
 import com.miscorf.service.FormService;
+import com.miscorf.service.PayService;
+import com.miscorf.service.UserService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,6 +28,15 @@ public class FormController {
     @Autowired
     @Qualifier("FormServiceImpl")
     FormService formService;
+
+    @Autowired
+    @Qualifier("UserServiceImpl")
+    UserService userService;
+
+    @Autowired
+    @Qualifier("PayServiceImpl")
+    PayService payService;
+
     @RequestMapping("/createTemplate")
     @ResponseBody
     public ResponseJson create(@RequestBody String form) {
@@ -48,15 +59,20 @@ public class FormController {
     @ResponseBody
     public ResponseJson createForm(@RequestBody Form form ) {
         ResponseJson responseJson = new ResponseJson();
+        System.out.println(form);
         form.setType(form.getType().toString());
         form.setForm_creat_time(new Timestamp(new Date().getTime()));
+        if (form.getCreatType().equals("first")){
+            form.setUsers(userService.queryAllUser());
+        }
         if (formService.getFormByName(form.getForm_name())==null){
             System.out.println(form.getForm_creat_time());
             try {
                 formService.addForm(form);
                 System.out.println(formService.getFormByForm(form));
-                formService.addAnswerByFromId(formService.getFormByForm(form).getForm_id());
+                formService.addAnswerByFromId(formService.getFormByForm(form).getForm_id(),form.getUsers());
             }catch (Exception e){
+                e.printStackTrace();
             }
 
         }else {
@@ -77,11 +93,22 @@ public class FormController {
         }
         return responseJson;
     }
+
     @RequestMapping("/allForm")
     @ResponseBody
-    public ResponseJson allForm() {
+    public ResponseJson allForm(@RequestBody ListQuery listQuery) {
+        System.out.println(listQuery);
         ResponseJson responseJson = new ResponseJson();
-        responseJson.setData(formService.queryAllForm());
+        int begin_num = (listQuery.getPage()-1)*listQuery.getLimit();
+        int size = listQuery.getLimit();
+        String name = '%'+listQuery.getTitle() +'%';
+        String creator = '%'+listQuery.getType() +'%';
+        System.out.println(name+creator);
+        List<Form> list = formService.getFormList(name,creator,begin_num, size);
+        Map<String, Object> map = new HashMap();
+        map.put("items", list);
+        map.put("total",formService.getFormListTotal(name,creator).size());
+       responseJson.setData(map);
         System.out.println(responseJson);
         return responseJson;
     }
@@ -90,9 +117,17 @@ public class FormController {
     public ResponseJson allUserForm(@RequestBody ListQuery listQuery) {
         System.out.println(listQuery);
         ResponseJson responseJson = new ResponseJson();
-
-        responseJson.setData(formService.getUserFormList(listQuery.getUser_name(),listQuery.getPage()-1,listQuery.getLimit()));
+        String title = '%'+listQuery.getTitle() +'%';
+        String name = listQuery.getUser_name();
+        int begin_num = (listQuery.getPage()-1)*listQuery.getLimit();
+        int size = listQuery.getLimit();
+        List<Answer> list = formService.getUserFormList(title,name,begin_num,size);
+        Map<String, Object> map = new HashMap();
+        map.put("items", list);
+        map.put("total",formService.getUserFormTotal(title,name).size());
+        responseJson.setData(map);
         System.out.println(responseJson);
+
         return responseJson;
     }
     @RequestMapping("/allTemplate")
@@ -109,8 +144,10 @@ public class FormController {
         //System.out.println(id);
         ResponseJson responseJson = new ResponseJson();
         Template template = formService.queryTemplateById(formService.getFormById(id).getTemplate_id());
+        Form form = formService.getFormById(id);
+        template.setForm_name(form.getForm_name());
         responseJson.setData(template);
-        //System.out.println(responseJson);
+        System.out.println(responseJson);
         return responseJson;
     }
 
@@ -160,4 +197,17 @@ public class FormController {
         responseJson.setData(map);
         return responseJson;
     }
+    @RequestMapping(value = "/getChart")
+    @ResponseBody
+    public ResponseJson getFormChart() {
+        ResponseJson responseJson = new ResponseJson();
+        Map<String, Object> map = new HashMap();
+        Map<String,Object>  formChart = formService.getFormChart();
+        Map<String,Object>  payChart = payService.getPayChart();
+        map.put("form",formChart);
+        map.put("pay",payChart);
+        responseJson.setData(map);
+        return responseJson;
+    }
+
 }

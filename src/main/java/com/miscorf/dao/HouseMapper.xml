@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miscorf.dao.HouseMapper">
+    <insert id="addHouse"  parameterType="House" >
+        insert into community.house
+        (
+house_address,
+house_host,
+house_area,
+house_type,
+house_user_name,
+house_update_time
+)
+        values (#{house_address},#{house_host},#{house_area},#{house_type},#{house_user_name},#{house_update_time});
+    </insert>
+
+    <update id="updateHouse" parameterType="House">
+        update community.house
+        set house_address = #{house_address},
+        house_host=#{house_host},
+        house_area=#{house_area},
+        house_type=#{house_type},
+        house_user_name=#{house_user_name},
+        house_update_time=#{house_update_time}
+        where house_id = #{house_id}
+    </update>
+
+    <select id="querryHouseByName" resultType="House">
+        select * from community.house  where house_user_name=#{house_user_name}
+         limit #{begin_num},#{page_size}
+    </select>
+
+    <select id="allHouse"  resultType="House">
+        select * from community.house
+
+    </select>
+    <select id="allHousePage"  resultType="House">
+        select * from community.house
+         where house_user_name like #{house_user_name}
+        limit #{begin_num},#{page_size}
+    </select>
+    <select id="allUserHouse" resultType="House">
+        select * from community.house
+          where house_user_name like #{user_name}
+    </select>
+
+    <delete id="deleteHouse" parameterType="House" >
+        delete from community.house where house_id=#{house_id};
+    </delete>
+
+
+</mapper>

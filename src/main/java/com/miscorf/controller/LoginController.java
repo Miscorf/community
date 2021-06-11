@@ -1,8 +1,10 @@
 package com.miscorf.controller;
 import com.miscorf.pojo.ResponseJson;
 import com.miscorf.pojo.User;
+import com.miscorf.service.FormService;
+import com.miscorf.service.NoticeService;
+import com.miscorf.service.PayService;
 import com.miscorf.service.UserService;
-import jdk.nashorn.internal.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -14,10 +16,23 @@ import java.util.*;
 @Controller
 @CrossOrigin
 @RequestMapping("/user")
-public class LoginController {
+public class
+LoginController {
     @Autowired
     @Qualifier("UserServiceImpl")
     private UserService userService;
+
+    @Autowired
+    @Qualifier("FormServiceImpl")
+    FormService formService;
+
+    @Autowired
+    @Qualifier("NoticeServiceImpl")
+    private NoticeService noticeService;
+
+    @Autowired
+    @Qualifier("PayServiceImpl")
+    PayService payService;
 
     @RequestMapping("/login")
     @ResponseBody
@@ -27,15 +42,16 @@ public class LoginController {
         User data_user=userService.queryUserByName(user.getUser_name());
         String token = UUID.randomUUID()+"";
         if(data_user!=null&&user.getUser_password().equals(data_user.getUser_password())){
-            userService.setTokenUserName(user.getUser_name(),token);
+            if(userService.setTokenUserName(user.getUser_name(),token))
             map.put("token",token);
+            else  responseJson.setCode(50000);
         }
         else {
             responseJson.setCode(50000);
         }
         responseJson.setData(map);
         responseJson.setToken(token);
-        System.out.println("helollo:"+responseJson);
+        System.out.println("Login ResponseJson:"+responseJson);
         return responseJson;
     }
 
@@ -66,5 +82,20 @@ public class LoginController {
         responseJson.setData("success");
         return responseJson;
     }
+    @RequestMapping("/getCount")
+    @ResponseBody
+    public ResponseJson getCount() {
+        ResponseJson responseJson = new ResponseJson();
+        Map<String, Object> map = new HashMap();
+
+        map.put("payCount", payService.getAllPayTotal("%%", "%%").size());
+        map.put("noticeCount", noticeService.queryAllNotice().size());
+        map.put("userCount", userService.queryAllUser().size());
+        map.put("formCount", formService.queryAllForm().size());
+        System.out.println(map);
+        responseJson.setData(map);
+        return responseJson;
+    }
+
 
 }

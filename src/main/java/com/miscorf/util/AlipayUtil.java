@@ -63,6 +63,7 @@ public class AlipayUtil {
                 "  }");
 
         //请求
+        alipayRequest.setReturnUrl("http://localhost:9528/#/dashboard");
         String form = alipayClient.pageExecute(alipayRequest).getBody();
         System.out.println(form);
         return  form;
@@ -95,12 +96,12 @@ public class AlipayUtil {
                 "    \"body\":\""+ body +"\"" +
                 "    }"+
                 "  }");
-
+        alipayRequest.setReturnUrl("http://localhost:9528/#/dashboard");
+        alipayRequest.setNotifyUrl("http://127.0.0.1:8080/pay/checkPay");
         //请求
         String form = alipayClient.pageExecute(alipayRequest).getBody();
         System.out.println(form);
         return  form;
-
     }
 
 

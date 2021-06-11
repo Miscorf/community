@@ -13,6 +13,7 @@ import java.util.List;
 public class Pay {
     int pay_id;
     int pay_table_id;
+    String user_id_name;
     String pay_title;
     String pay_content;
     String user_name;
@@ -24,5 +25,6 @@ public class Pay {
     Timestamp deadline;
     Timestamp create_time;
     Timestamp update_time;
+    String creatType;
 
 }

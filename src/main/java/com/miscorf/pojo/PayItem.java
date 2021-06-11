@@ -1,6 +1,5 @@
 package com.miscorf.pojo;
 
-import com.sun.deploy.panel.ITreeNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

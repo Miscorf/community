@@ -2,6 +2,7 @@ package com.miscorf.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.miscorf.pojo.House;
 import com.miscorf.pojo.ListQuery;
 import com.miscorf.pojo.ResponseJson;
 import com.miscorf.pojo.User;
@@ -9,6 +10,7 @@ import com.miscorf.service.UserService;
 import com.miscorf.util.QiniuCloudUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.YamlMapFactoryBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,17 +45,42 @@ public class UserController {
         List<User> users= userService.queryAllUserPage(begin_num,listQuery.getLimit(),user_name,user_right);
         Map<String, Object> map = new HashMap();
         map.put("items", users);
+        System.out.println(begin_num);
         map.put("total",userService.queryAllUser().size());
+        responseJson.setData(map);
+        return responseJson;
+    }
+
+    @RequestMapping(value = "/allHouse")
+    @ResponseBody
+    public ResponseJson allHouse(@RequestBody ListQuery listQuery) {
+        System.out.println(listQuery);
+        ResponseJson responseJson = new ResponseJson();
+        int begin_num = (listQuery.getPage()-1)*listQuery.getLimit();
+        String user_name='%'+listQuery.getTitle()+'%';
+        System.out.println(user_name);
+        List<House> houses= userService.allHousePage(begin_num,listQuery.getLimit(),user_name);
+        Map<String, Object> map = new HashMap();
+        map.put("items", houses);
+        map.put("total",userService.allHouse().size());
         responseJson.setData(map);
         return responseJson;
     }
     @RequestMapping(value = "/allUser")
     @ResponseBody
     public ResponseJson allUser() {
-
+        System.out.println("allUser");
         ResponseJson responseJson = new ResponseJson();
 
         responseJson.setData(userService.queryAllUser());
+        return responseJson;
+    }
+    @RequestMapping(value = "/allAdmin")
+    @ResponseBody
+    public ResponseJson allAdmin() {
+        System.out.println("allAdmin");
+        ResponseJson responseJson = new ResponseJson();
+        responseJson.setData(userService.queryAdmin());
         return responseJson;
     }
     @RequestMapping(value = "/update")
@@ -62,6 +89,19 @@ public class UserController {
         ResponseJson responseJson = new ResponseJson();
         System.out.println(user);
         if (userService.updateUser(user)){
+            return responseJson;
+        }
+        else {
+            responseJson.setCode(50000);
+            return responseJson;
+        }
+    }
+    @RequestMapping(value = "/updateHouse")
+    @ResponseBody
+    public ResponseJson updateHouse(@RequestBody House house) {
+        ResponseJson responseJson = new ResponseJson();
+        System.out.println(house);
+        if (userService.updateHouse(house)){
             return responseJson;
         }
         else {
@@ -82,6 +122,46 @@ public class UserController {
             return responseJson;
         }
     }
+    @RequestMapping(value = "/createHouse")
+    @ResponseBody
+    public ResponseJson createHouse(@RequestBody House House) {
+        ResponseJson responseJson = new ResponseJson();
+        System.out.println(House);
+        if (userService.addHouse(House)){
+            return responseJson;
+        }
+        else {
+            responseJson.setCode(50000);
+            return responseJson;
+        }
+    }
+    @RequestMapping(value = "/delete")
+    @ResponseBody
+    public ResponseJson delete(@RequestBody User user) {
+        ResponseJson responseJson = new ResponseJson();
+        System.out.println(user);
+        if (userService.deleteUserByID(user.getUser_id())){
+            return responseJson;
+        }
+        else {
+            responseJson.setCode(50000);
+            return responseJson;
+        }
+    }
+    @RequestMapping(value = "/deleteHouse")
+    @ResponseBody
+    public ResponseJson deleteHouse(@RequestBody House House) {
+        ResponseJson responseJson = new ResponseJson();
+        System.out.println(House);
+        if (userService.deleteHouse(House)){
+            return responseJson;
+        }
+        else {
+            responseJson.setCode(50000);
+            return responseJson;
+        }
+    }
+
     @RequestMapping(value = "/fetchByName")
     @ResponseBody
     public ResponseJson fetchByName(String user_name) {
@@ -93,9 +173,24 @@ public class UserController {
             return responseJson;
         }
         else {
-            responseJson.setCode(50000);
+            responseJson.setStatus("false");
             return responseJson;
         }
+    }
+    @RequestMapping(value = "/fetchHouseByName")
+    @ResponseBody
+    public ResponseJson fetchHouseByName(@RequestBody ListQuery listQuery) {
+        System.out.println(listQuery);
+        ResponseJson responseJson = new ResponseJson();
+        int begin_num = (listQuery.getPage()-1)*listQuery.getLimit();
+        String user_name=listQuery.getType();
+        System.out.println(user_name);
+        List<House> houses= userService.querryHouseByName(begin_num,listQuery.getLimit(),user_name);
+        Map<String, Object> map = new HashMap();
+        map.put("items", houses);
+        map.put("total",userService.allUserHouse(user_name).size());
+        responseJson.setData(map);
+        return responseJson;
     }
     @RequestMapping(value = "/updatePassword")
     @ResponseBody
@@ -111,7 +206,7 @@ public class UserController {
             userService.updatePassword(name,first);
         }
         else{
-            responseJson.setStatus("密码错误");
+            responseJson.setStatus("false");
         }
        return  responseJson;
     }
@@ -119,6 +214,20 @@ public class UserController {
     @ResponseBody
     public ResponseJson updateImage(@RequestBody User user) {
         ResponseJson responseJson = new ResponseJson();
+        System.out.println(user);
+        return  responseJson;
+    }
+
+    @RequestMapping(value = "/register")
+    @ResponseBody
+    public ResponseJson register(@RequestBody User user) {
+        ResponseJson responseJson = new ResponseJson();
+        User data_user=userService.queryUserByName(user.getUser_name());
+        if(data_user!=null){
+            responseJson.setCode(50000);
+            return responseJson;
+        }
+        userService.addUser(user);
         System.out.println(user);
         return  responseJson;
     }
@@ -149,7 +258,10 @@ public class UserController {
                 User user = new User();
                 user.setUser_name(name);
                 user.setUser_image(url);
-                userService.updateUserImage(user);
+                System.out.println(user);
+                System.out.println(url);
+                System.out.println(userService.updateUserImage(user));
+
                 //删除原头像
                 qiniuUtil.delete(avatar);
                 result.setStatus("文件上传成功");

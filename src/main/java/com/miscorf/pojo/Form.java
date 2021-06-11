@@ -3,8 +3,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,5 +17,7 @@ public class Form {
     Timestamp deadline;
     String form_creator;
     Object type;
+    List<User> users;
+    String creatType;
 
 }

@@ -9,6 +9,16 @@
         (pay_title,pay_content,pay_money,pay_creator,create_time,deadline)
         values (#{pay_title},#{pay_content},#{pay_money},#{pay_creator},#{create_time},#{deadline});
     </insert>
+    <update id="updatePay"  parameterType="Pay" >
+        update  community.pay
+        set
+          pay_table_id=#{pay_table_id}
+          ,user_name=#{user_name}
+          ,is_pay=#{is_pay}
+          ,update_time=#{update_time}
+        where pay_id=#{pay_id}
+    </update>
+
     <insert id="creatPayUsers"  parameterType="pay" >
         insert into community.pay
         (pay_table_id,user_name,is_pay)
@@ -20,21 +30,33 @@
     </select>
     <select id="getAllPay" parameterType="Pay" resultType="Pay">
         select * from community.pay_table
+        where pay_title like #{name} and pay_creator like #{creator}
         limit #{begin_num},#{page_size}
-    </select><select id="getUserPayTable" parameterType="Pay" resultType="Pay">
+    </select>
+    <select id="getAllPayTotal" parameterType="Pay" resultType="Pay">
+        select * from community.pay_table
+        where pay_title like #{name} and pay_creator like #{creator}
+    </select>
+
+    <select id="getUserPayTable" parameterType="Pay" resultType="Pay">
         select * from community.pay_table  where user_name=#{user_name}
          limit #{begin_num},#{page_size}
     </select>
     <select id="getUserPayByName"  resultType="Pay">
-        SELECT pay_title,pay_content,pay_money,pay_creator,create_time,deadline,is_pay,pay.pay_table_id
+        SELECT pay_id,pay_title,pay_content,pay_money,pay_creator,create_time,deadline,is_pay,pay.pay_table_id
         FROM pay,pay_table
-        WHERE user_name =#{user_name} and pay.pay_table_id=pay_table.pay_table_id
+        WHERE user_name =#{user_name} and pay.pay_table_id=pay_table.pay_table_id and pay_title like #{name}
         limit #{begin_num},#{page_size}
     </select>
 
+    <select id="getUserPayTotal"  resultType="Pay">
+        SELECT pay_title,pay_content,pay_money,pay_creator,create_time,deadline,is_pay,pay.pay_table_id
+        FROM pay,pay_table
+        WHERE user_name =#{user_name} and pay.pay_table_id=pay_table.pay_table_id and pay_title like #{name}
+    </select>
     <select id="getPayByTableId"  resultType="Pay">
-        SELECT pay_title,pay_content,pay_money,pay_creator,create_time,deadline,is_pay,user_name FROM pay,pay_table
-        WHERE pay.pay_table_id =#{pay_table_id} and pay.pay_table_id=pay_table.pay_table_id
+        SELECT pay_title,pay_content,pay_money,pay_creator,create_time,deadline,is_pay,user.user_name,user_id_name FROM pay,pay_table,user
+        WHERE pay.pay_table_id =#{pay_table_id} and pay.pay_table_id=pay_table.pay_table_id and user.user_name=pay.user_name
         limit #{begin_num},#{page_size}
     </select>
 
@@ -43,6 +65,22 @@
         WHERE pay.pay_table_id =#{pay_table_id} and pay.pay_table_id=pay_table.pay_table_id
 
     </select>
-
+    <delete id="deletePay">
+        delete from community.pay
+        where pay_table_id=#{id}
+    </delete>
+    <delete id="deletePayTable">
+        delete from community.pay_table
+        where pay_table_id=#{id}
+    </delete>
+    <select id="getRecentlyPayStatus" resultType="Pay">
+        select * from community.pay_table
+        order by create_time
+        limit 0,12
+    </select>
+    <select id="getPayedCount"  resultType="int">
+        SELECT COUNT(is_pay) FROM pay
+        where is_pay = true and pay_table_id = #{id}
+    </select>
 
 </mapper>

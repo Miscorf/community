@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import sun.util.calendar.BaseCalendar;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,10 +25,13 @@ public class MyTest {
 //        bookServiceImpl.addBook(book);
 //        System.out.println(book.getBookID());
         PayService payService = (PayService)context.getBean("PayServiceImpl");
-        Pay pay  = new Pay();
-        pay.setPay_title("text");
-        payService.creatPay(pay);
-        System.out.println(pay.getPay_table_id());
+        //Pay pay  = new Pay();
+        //pay.setPay_title("text");
+        //payService.creatPay(pay);
+        List<PayItem> list= payService.getAllPayItemPage(0,10,"%%");
+        System.out.println(list);
+
+        //System.out.println(pay.getPay_table_id());
     }
     @Test
     public void user_test(){
@@ -42,19 +46,21 @@ public class MyTest {
        // List<User> users =userServiceImpl.queryAllUserPage(1,10,"li", null);
         //userServiceImpl.setTokenUser(19, "a794df83-4879-4f4a-a706-0a2f59182f74");
 
-//        FormService formService = (FormService)context.getBean("FormServiceImpl");
+        FormService formService = (FormService)context.getBean("FormServiceImpl");
 //        Answer answer =  new Answer();
 //        answer.setForm_id(21);
 //        answer.setUser_name("admin");
 //        answer.setAnswer_content("content");
 //        formService.updateAnswer(answer);
-//        Template template = new Template();
-//        template.setName("123");
-//        template.setCreat_time("2021-04-27 13:41:24.832");
-//        template.setCreator();
-//        template.setVisible();
-//        template.setData();
-        //formService.addTemplate(template);
+        for (int i=0;i<10;i++){
+            Template template = new Template();
+            template.setName("123");
+            template.setCreator("12312");
+            template.setVisible(true);
+            template.setData("data");
+            formService.addTemplate(template);
+        }
+
 //        Form form =new Form();
 //        form.setForm_name("123");
 //        form.setTemplate_id(3);

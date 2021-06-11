@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class MessageServiceImpl implements MessageService {
-    MessageMapper messageMapper;
+    private MessageMapper messageMapper;
     public void setMessageMapper(MessageMapper messageMapper) {
         this.messageMapper=messageMapper;
     }
